@@ -23,6 +23,7 @@ class FriendZoneApp: Application() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
             startActivity(intent)
+
         }
     }
 }

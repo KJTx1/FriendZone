@@ -71,4 +71,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (auth.currentUser != null) {
+            val intent = Intent(this, UserContent::class.java).apply {
+                putExtra(UserContent.USER_KEY, auth.currentUser)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(intent)
+        }
+    }
 }
