@@ -25,7 +25,7 @@ class UserContent : AppCompatActivity() {
 //        user = (application as FriendZoneApp).user!!
 
         currentUser = intent.getParcelableExtra<FirebaseUser>(USER_KEY)!!
-        tvUser.text = currentUser.toString()
+        tvUser.text = currentUser.email
 
         btnLogout.setOnClickListener {
             logout()
@@ -33,9 +33,8 @@ class UserContent : AppCompatActivity() {
     }
 
     private fun logout() {
-
         auth.signOut()
-        Toast.makeText(this, "User $currentUser logged out", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "User ${currentUser.email} logged out", Toast.LENGTH_SHORT).show()
         finish()
     }
 }
