@@ -19,6 +19,7 @@ class UserContent : AppCompatActivity() {
 
     companion object {
         const val USER_KEY = "USER_KEY"
+        const val USER_DISPLAY_NAME = "USER_DISPLAY_NAME"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,11 @@ class UserContent : AppCompatActivity() {
         auth = (application as FriendZoneApp).auth
 
         currentUser = intent.getParcelableExtra<FirebaseUser>(USER_KEY)!!
-        tvUser.text = currentUser.email
+        if (currentUser.displayName != null) {
+            tvUser.text = currentUser.displayName
+        } else {
+            tvUser.text = intent.getStringExtra(USER_DISPLAY_NAME)?.toString()
+        }
 
         btnLogout.setOnClickListener {
             logout()
@@ -40,7 +45,7 @@ class UserContent : AppCompatActivity() {
 
     private fun logout() {
         auth.signOut()
-        Toast.makeText(this, "User ${currentUser.email} logged out", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "User ${tvUser.text} logged out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, MainActivity::class.java))
     }
 

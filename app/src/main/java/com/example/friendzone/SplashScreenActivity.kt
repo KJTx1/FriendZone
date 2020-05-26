@@ -1,9 +1,10 @@
 package com.example.friendzone
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.example.friendzone.UserContent.Companion.USER_DISPLAY_NAME
+import com.example.friendzone.UserContent.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -24,7 +25,8 @@ class SplashScreenActivity : AppCompatActivity() {
                     Thread.sleep(2000)
                     if (auth.currentUser != null) {
                         intent = Intent(baseContext, UserContent::class.java).apply {
-                            putExtra(UserContent.USER_KEY, auth.currentUser)
+                            putExtra(USER_KEY, auth.currentUser)
+//                            putExtra(USER_DISPLAY_NAME, auth.currentUser!!.displayName)
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         }
                     } else {

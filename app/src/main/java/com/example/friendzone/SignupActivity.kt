@@ -1,11 +1,14 @@
 package com.example.friendzone
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.friendzone.UserContent.Companion.USER_DISPLAY_NAME
+import com.example.friendzone.UserContent.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.activity_signup.*
 
 
@@ -27,6 +30,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun registerUser() {
+        val displayName = etDisplayName.text.toString().trim()
         val email = etEmail.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
@@ -41,12 +45,28 @@ class SignupActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.i("Jason", "createUserWithEmail:success")
+                        Log.i("TEST", "createUserWithEmail:success")
                         Toast.makeText(this, "Start sharing with friends!", Toast.LENGTH_SHORT).show()
                         val user = auth.currentUser
 
+                        val profileUpdates =
+                            UserProfileChangeRequest.Builder()
+                                .setDisplayName(displayName)
+                                .build()
+
+                        user?.updateProfile(profileUpdates)
+                            ?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Log.i(
+                                        "TEST",
+                                        "User display name updated."
+                                    )
+                                }
+                            }
+
                         val intent = Intent(this, UserContent::class.java).apply {
-                            putExtra(UserContent.USER_KEY, user)
+                            putExtra(USER_KEY, user)
+                            putExtra(USER_DISPLAY_NAME, displayName)
                         }
                         startActivity(intent)
 
@@ -55,7 +75,7 @@ class SignupActivity : AppCompatActivity() {
                         val substringIndex = errorMsg.indexOf(':')
                         errorMsg = errorMsg.substring(substringIndex + 1)
 
-                        Log.i("Jason", errorMsg, task.exception)
+                        Log.i("TEST", errorMsg, task.exception)
                         Toast.makeText(baseContext, errorMsg,
                             Toast.LENGTH_SHORT).show()
                     }

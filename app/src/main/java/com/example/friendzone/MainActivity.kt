@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.friendzone.UserContent.Companion.USER_DISPLAY_NAME
 import com.example.friendzone.UserContent.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.i("Jason", "createUserWithEmail:success")
+                        Log.i("TEST", "createUserWithEmail:success")
                         Toast.makeText(this, "Start sharing with friends!", Toast.LENGTH_SHORT).show()
                         val user = auth.currentUser
 
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                         errorMsg = errorMsg.substring(substringIndex + 1)
 
                         // If sign in fails, display a message to the user.
-                        Log.i("Jason", errorMsg, task.exception)
+                        Log.i("TEST", errorMsg, task.exception)
 
                         Toast.makeText(baseContext, errorMsg,
                             Toast.LENGTH_SHORT).show()
