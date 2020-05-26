@@ -53,7 +53,7 @@ class UserContent : AppCompatActivity() {
         if (backPressTime?.plus(2000)!! > System.currentTimeMillis()) {
             backToast.cancel()
             super.onBackPressed()
-            finish()
+            finishAffinity()
         } else {
             backToast.show()
         }
