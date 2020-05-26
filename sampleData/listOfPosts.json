@@ -1,0 +1,31 @@
+{
+	“group”:
+	“numOfPosts”: 5,
+	“posts”: [
+		{
+			“id”: “post1”,
+			“user”: “Meredith Grey”,
+			“image”: “https://picsum.photos/200”,
+			“audio”: “”,
+			“timestamp”: “20 May 2020 11:05:30”,
+			“reactions”: []
+
+		},
+		{
+			“id”: “post2”,
+			“user”: “Bucky Barnes”,
+			“image”: “https://picsum.photos/200”,
+			“audio”: “”,
+			“timestamp”: “21 May 2020 11:05:30”,
+			“reactions”: []
+		},
+		{
+			“id”: “post3”,
+			“user”: “John Snow”,
+			“image”: “https://picsum.photos/200”,
+			“audio”: “”,
+			“timestamp”: “22 May 2020 11:05:30”,
+			“reactions”: []
+		}
+	]
+}
