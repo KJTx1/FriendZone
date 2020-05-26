@@ -11,19 +11,13 @@ import com.google.firebase.ktx.Firebase
 class FriendZoneApp: Application() {
     lateinit var auth: FirebaseAuth
 
+//    lateinit var sessionManager: SessionManager
+
 //    var user: FirebaseUser? = null
 
     override fun onCreate() {
         super.onCreate()
         auth = Firebase.auth
 
-        if (auth.currentUser != null) {
-            val intent = Intent(this, UserContent::class.java).apply {
-                putExtra(UserContent.USER_KEY, auth.currentUser)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            startActivity(intent)
-
-        }
     }
 }

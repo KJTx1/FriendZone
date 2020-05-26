@@ -29,7 +29,6 @@ class UserContent : AppCompatActivity() {
         backToast = Toast.makeText(this,"Press back again to exit",Toast.LENGTH_LONG);
 
         auth = (application as FriendZoneApp).auth
-//        user = (application as FriendZoneApp).user!!
 
         currentUser = intent.getParcelableExtra<FirebaseUser>(USER_KEY)!!
         tvUser.text = currentUser.email
@@ -42,15 +41,14 @@ class UserContent : AppCompatActivity() {
     private fun logout() {
         auth.signOut()
         Toast.makeText(this, "User ${currentUser.email} logged out", Toast.LENGTH_SHORT).show()
-        finish()
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun onBackPressed() {
         if (backPressTime?.plus(2000)!! > System.currentTimeMillis()) {
             backToast.cancel()
             super.onBackPressed()
-            finishAffinity()
-
+            finish()
         } else {
             backToast.show()
         }
