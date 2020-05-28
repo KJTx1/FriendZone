@@ -17,11 +17,11 @@ class GroupFeed : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_feed)
 
-        postAdapter = postAdapter(listOfPosts)
+        postAdapter = PostAdapter(listOfPosts)
         rvPostFeed.adapter = postAdapter
 
         postManager = (application as FriendZoneApp).postManager
-        }
+    }
 
     fun fetchPosts() {
         postManager.getPosts({

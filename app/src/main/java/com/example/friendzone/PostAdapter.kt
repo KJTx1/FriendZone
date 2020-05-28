@@ -13,6 +13,8 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
 
     private var listOfPosts: List<Post> = initialListOfPosts.toList()
 
+    var onPostClickListener: ((post: Post) -> Unit)? = null
+
     // Creates ViewHolder to hold reference of the views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post, parent, false)
@@ -40,6 +42,10 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
             tvUsername.text = post.user
             Picasso.get().load(post.image).into(ivPostImage)
             tvTimestamp.text = post.timestamp.toString()
+
+            itemView.setOnClickListener {
+                onPostClickListener?.invoke(post)
+            }
         }
     }
 
