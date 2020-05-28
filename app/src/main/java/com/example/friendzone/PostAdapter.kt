@@ -26,6 +26,11 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
         holder.bind(post)
     }
 
+    fun change(newPosts: List<Post>) {
+        listOfPosts = newPosts
+        notifyDataSetChanged()
+    }
+
     inner class PostViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val tvUsername = itemView.findViewById<TextView>(R.id.tvUsername)
         private val ivPostImage = itemView.findViewById<ImageView>(R.id.ivPostImage)
