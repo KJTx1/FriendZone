@@ -41,6 +41,11 @@ class UserContent : AppCompatActivity() {
         btnLogout.setOnClickListener {
             logout()
         }
+
+        btnGroupFeed.setOnClickListener {
+            val intent = Intent(this, GroupFeed::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun logout() {
@@ -59,5 +64,4 @@ class UserContent : AppCompatActivity() {
         }
         backPressTime = System.currentTimeMillis()
     }
-
 }
