@@ -7,5 +7,5 @@ import kotlinx.android.parcel.Parcelize
 data class postList(
     val group: String,
     val numOfPosts: Int,
-    val Posts: List<Post>
+    val posts: List<Post>
 ) : Parcelable

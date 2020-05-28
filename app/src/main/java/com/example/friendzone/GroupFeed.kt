@@ -10,15 +10,16 @@ import kotlinx.android.synthetic.main.activity_group_feed.*
 class GroupFeed : AppCompatActivity() {
 
     private lateinit var postAdapter: PostAdapter
-    var listOfPosts = ArrayList<Post>()
+    var listOfPosts = mutableListOf<Post>()
     private lateinit var postManager: PostManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_feed)
         postManager = (application as FriendZoneApp).postManager
-        postManager.getPosts({
-            listOfPosts = it.Posts as ArrayList<Post>
+        postManager.getPosts({ postLibrary ->
+            Log.i("info", postLibrary.toString())
+            listOfPosts = postLibrary.posts.toMutableList()
             postAdapter = PostAdapter(listOfPosts)
             rvPostFeed.adapter = postAdapter
         }, {
@@ -28,7 +29,7 @@ class GroupFeed : AppCompatActivity() {
 
     fun fetchPosts() {
         postManager.getPosts({
-            listOfPosts = it.Posts as ArrayList<Post>
+            listOfPosts = it.posts.toMutableList()
             postAdapter.change(listOfPosts)
             rvPostFeed.adapter = postAdapter
         }, {

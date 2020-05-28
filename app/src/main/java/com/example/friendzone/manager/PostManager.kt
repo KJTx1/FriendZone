@@ -17,7 +17,7 @@ class PostManager(context: Context) {
     private val queue: RequestQueue = Volley.newRequestQueue(context)
 
 
-    fun getPosts(onSongsReady: (postList) -> Unit, onError: (() -> Unit)? = null) {
+    fun getPosts(onPostsReady: (postList) -> Unit, onError: (() -> Unit)? = null) {
         val url = postListURL
         val request = StringRequest(
             Request.Method.GET, url,
@@ -25,7 +25,7 @@ class PostManager(context: Context) {
                 // success
                 val gson = Gson()
                 val allPosts = gson.fromJson(response, postList::class.java)
-                onSongsReady(allPosts)
+                onPostsReady(allPosts)
             },
             { error ->
                 //error
