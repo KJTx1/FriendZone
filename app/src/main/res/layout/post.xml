@@ -9,8 +9,11 @@
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
         android:paddingTop="50px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_launcher_background"
         tools:layout_editor_absoluteY="19dp" />
 
@@ -19,19 +22,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Username"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ivPostImage"
         app:layout_constraintStart_toStartOf="@+id/ivPostImage"
         app:layout_constraintTop_toTopOf="@+id/tvTimestamp" />
-
-    <TextView
-        android:id="@+id/tvReactions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reactions"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
 
     <TextView
         android:id="@+id/tvTimestamp"
@@ -41,4 +37,13 @@
         app:layout_constraintBottom_toTopOf="@+id/ivPostImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/lvReactions"
+        android:layout_width="221dp"
+        android:layout_height="59dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
