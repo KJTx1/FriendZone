@@ -11,15 +11,15 @@
 			"reactions": [
         {
           "id": "reaction1",
-          "user": "George"
-          "reaction": "U+1F600"
+          "user": "George",
+          "reaction": "U+1F600",
           "timestamp": "20 May 2020 11:06:30"
 
         },
         {
           "id": "reaction2",
-          "user": "Taylor"
-          "reaction": "U+1F602"
+          "user": "Taylor",
+          "reaction": "U+1F602",
           "timestamp": "20 May 2020 11:07:30"
 
         }

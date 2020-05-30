@@ -6,16 +6,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.friendzone.manager.PostManager
 import com.example.friendzone.model.Post
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_group_feed.*
 
 class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     private var listOfPosts: List<Post> = initialListOfPosts.toList()
+    private lateinit var reactionAdapter: ReactionAdapter
 
     var onPostClickListener: ((post: Post) -> Unit)? = null
 
-    // Creates ViewHolder to hold reference of the views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post, parent, false)
         return PostViewHolder(view)
@@ -37,6 +39,7 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
         private val tvUsername = itemView.findViewById<TextView>(R.id.tvUsername)
         private val ivPostImage = itemView.findViewById<ImageView>(R.id.ivPostImage)
         private val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
+        private val rvPostReactions = itemView.findViewById<RecyclerView>(R.id.rvPostReactions)
 
         fun bind(post: Post) {
             tvUsername.text = post.user
@@ -45,6 +48,10 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
 
             itemView.setOnClickListener {
                 onPostClickListener?.invoke(post)
+            }
+            if(post.reactions.isNotEmpty()) {
+                reactionAdapter = ReactionAdapter(post.reactions)
+                rvPostReactions.adapter = reactionAdapter
             }
         }
     }
