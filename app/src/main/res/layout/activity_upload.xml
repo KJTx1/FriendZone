@@ -5,18 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     android:layout_gravity="center"
-
     android:background="#F4F4F4"
     tools:context=".Upload"
     android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <ImageButton
             android:id="@+id/btnFromCamera"
@@ -25,7 +23,8 @@
             android:layout_gravity="center"
             android:background="#FFFFFF"
             app:srcCompat="@drawable/ic_camera_foreground"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:foreground="?android:attr/selectableItemBackground" />
 
         <ImageButton
             android:id="@+id/btnFromGallery"
@@ -35,8 +34,8 @@
             android:background="#F4F4F4"
             app:srcCompat="@drawable/ic_choose_photo_foreground"
             android:adjustViewBounds="true"
-            android:scaleX="1.2" />
-
+            android:scaleX="1.2"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clAudioBar"
