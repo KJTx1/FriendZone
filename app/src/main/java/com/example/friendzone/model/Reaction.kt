@@ -8,6 +8,6 @@ import java.util.*
 data class Reaction(
     val id: String,
     val user: String,
-    val reaction: CharSequence,
-    val timestamp: Date
+    val reaction: String,
+    val timestamp: String
 ) : Parcelable
