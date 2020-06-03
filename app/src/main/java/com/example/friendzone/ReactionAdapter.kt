@@ -17,7 +17,6 @@ class ReactionAdapter(private val initialListOfReactions: List<Reaction>): Recyc
         return ReactionViewHolder(view)
     }
 
-
     override fun getItemCount() = listOfReactions.size
 
     override fun onBindViewHolder(holder: ReactionAdapter.ReactionViewHolder, position: Int) {

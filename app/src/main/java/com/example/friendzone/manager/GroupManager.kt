@@ -12,10 +12,9 @@ import com.google.gson.Gson
 
 class GroupManager(context: Context) {
 
-    val groupListURL = "https://raw.githubusercontent.com/KJTx1/FriendZone/thomas/sampleData/listOfGroups.json"
+    val groupListURL = "https://raw.githubusercontent.com/KJTx1/FriendZone/thomas/sampleData/GroupList.json"
 
     private val queue: RequestQueue = Volley.newRequestQueue(context)
-
 
     fun getGroups(onGroupsReady: (GroupList) -> Unit, onError: (() -> Unit)? = null) {
         val url = groupListURL
