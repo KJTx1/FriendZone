@@ -30,18 +30,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
-        /*
-        val fontRequest = FontRequest(
-            "com.google.android.gms.fonts",
-            "com.google.android.gms",
-            "Noto Color Emoji Compat",
-            R.array.com_google_android_gms_fonts_certs
-        )
-        val config = FontRequestEmojiCompatConfig(this, fontRequest)
-        EmojiCompat.init(config)
-
-         */
-
     }
 
     private fun loginUser() {
@@ -67,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                             putExtra(USER_KEY, user)
                         }
                         startActivity(intent)
-
 //                        startActivityForResult(intent, RC_SIGN_IN)
 
                     } else {
