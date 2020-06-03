@@ -16,11 +16,18 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_upload.*
 import java.io.File
 import java.io.FileOutputStream
@@ -28,28 +35,33 @@ import java.io.OutputStream
 
 class Upload : AppCompatActivity() {
 
-    val CAMERA_REQUEST_CODE = 0
-
-    val GALLERY_REQUEST_CODE = 1000
+    private val CAMERA_REQUEST_CODE = 0
+    private val GALLERY_REQUEST_CODE = 1000
 
     private var isRecording: Boolean = false
 
     private var isPlaying: Boolean = false
 
-//    private var uploadImageUri: Uri? = null
+    private var imageUri: Uri? = null
 
     private var cameraImageFile: File? = null
-
-    private var galleryImageUri: Uri? = null
 
     private var mediaRecorder: MediaRecorder? = null
     private var audioFileOutput: String? = null
 
+    private var audioDownloadUrl: String? = null
+
     private var mediaPlayer: MediaPlayer? = null
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var storageRef: StorageReference
+    private lateinit var databaseRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
+
+        auth = (application as FriendZoneApp).auth
 
         hideRest()
 
@@ -67,6 +79,7 @@ class Upload : AppCompatActivity() {
         btnDelete.isEnabled = false
 
         btnFromCamera.setOnClickListener {
+            imageUri = null
             val callCameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (callCameraIntent.resolveActivity(packageManager) != null) {
 
@@ -75,7 +88,7 @@ class Upload : AppCompatActivity() {
         }
 
         btnFromGallery.setOnClickListener {
-            galleryImageUri = null
+            imageUri = null
             checkPermissionForImage()
         }
 
@@ -120,6 +133,13 @@ class Upload : AppCompatActivity() {
                 }
             }
         })
+
+        btnPost.setOnClickListener {
+            uploadFile()
+        }
+
+        storageRef = FirebaseStorage.getInstance().getReference("uploads")
+        databaseRef = FirebaseDatabase.getInstance().getReference("uploads")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -150,6 +170,8 @@ class Upload : AppCompatActivity() {
                             stream.flush()
                             stream.close()
 
+                            imageUri = Uri.fromFile(cameraImageFile)
+
 //                            Log.i("File", imageFile!!.absolutePath)
 //                            btnUploadImage.setImageBitmap(BitmapFactory.decodeFile(imageFile.absolutePath))
 
@@ -170,8 +192,9 @@ class Upload : AppCompatActivity() {
                     btnFromGallery.scaleX = 1F
                     btnFromGallery.scaleType = ImageView.ScaleType.FIT_CENTER
 
-                    galleryImageUri = data.data
-                    btnFromGallery.setImageURI(galleryImageUri)
+                    imageUri = data.data
+                    btnFromGallery.setImageURI(imageUri)
+
                 }
             }
         }
@@ -218,8 +241,6 @@ class Upload : AppCompatActivity() {
             mediaRecorder?.stop()
             mediaRecorder?.release()
 
-            Log.i("File", audioFileOutput)
-
             isPlaying = false
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(audioFileOutput)
@@ -234,7 +255,6 @@ class Upload : AppCompatActivity() {
     private fun playRecording() {
         if (audioFileOutput != null) {
 
-//            Log.i("File", audioFileOutput)
             if (!isPlaying) {
                 isPlaying = true
                 mediaPlayer?.start()
@@ -263,6 +283,7 @@ class Upload : AppCompatActivity() {
 
         if (audioFileOutput != null) {
             File(audioFileOutput!!).delete()
+            audioFileOutput = null
         }
 
         btnPlay.visibility = View.GONE
@@ -303,6 +324,124 @@ class Upload : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    private fun getFileExtension(uri: Uri): String? {
+        val mime = MimeTypeMap.getSingleton()
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri))
+    }
+
+    private fun uploadFile() {
+
+        if (imageUri != null) {
+            var extension = getFileExtension(imageUri!!)
+            if (extension == null) {
+                extension = "jpg"
+            }
+
+            var fileReference = storageRef.child(
+                groupSpinner.selectedItem.toString() + '/' + System.currentTimeMillis()
+                    .toString() + '.' + extension
+            )
+
+            fileReference.putFile(imageUri!!)
+                .addOnSuccessListener { task ->
+                    btnPost.alpha = 1f
+                    btnPost.isClickable = true
+
+                    task.storage.downloadUrl
+                        .addOnCompleteListener {
+
+                            val currentTime = System.currentTimeMillis()
+
+                            if (audioFileOutput == null) {
+                                val upload = UploadManager(
+                                    auth.currentUser?.displayName.toString(),
+                                    currentTime,
+                                    groupSpinner.selectedItem.toString(),
+                                    etDescription.text.toString(),
+                                    auth.currentUser?.email.toString(),
+                                    it.result.toString(),
+                                    ""
+                                )
+
+                                databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + '/' + auth.currentUser?.uid.toString())
+                                    .setValue(upload)
+
+                                Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT)
+                                    .show()
+
+                                finish()
+                            } else {
+                                uploadAudio(it.result.toString(), currentTime)
+                            }
+                        }
+
+
+//                databaseRef.child(auth.currentUser?.email.toString() + '/' + currentTime.toString()).setValue(upload)
+
+//                var upload = UploadManager().upload(auth.currentUser?.email.toString(), it.metadata?.reference?.downloadUrl.toString())
+//                var uploadID = databaseRef.push().key
+//                if (uploadID != null) {
+////                    databaseRef.child(uploadID).setValue(upload)
+//                    databaseRef.setValue(upload)
+//                    Log.i("XXX", auth.currentUser?.email.toString())
+//                    Log.i("XXX", it.metadata?.reference?.downloadUrl.toString())
+//                }
+                }
+                .addOnFailureListener {
+                    btnPost.alpha = 1f
+                    btnPost.isClickable = true
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
+                .addOnProgressListener {
+                    btnPost.alpha = .5f;
+                    btnPost.isClickable = false;
+                }
+        }
+    }
+
+    private fun uploadAudio(imageUrl: String, currentTime: Long) {
+        val recordingUrl = Uri.fromFile(File(audioFileOutput!!))
+
+        val fileReference = storageRef.child(
+            groupSpinner.selectedItem.toString() + '/' + currentTime + ".mp3"
+        )
+
+        fileReference.putFile(recordingUrl!!)
+            .addOnSuccessListener {task ->
+                task.storage.downloadUrl
+                    .addOnCompleteListener {
+                        audioDownloadUrl = it.result.toString()
+
+                        val upload = UploadManager(
+                            auth.currentUser?.displayName.toString(),
+                            currentTime,
+                            groupSpinner.selectedItem.toString(),
+                            etDescription.text.toString(),
+                            auth.currentUser?.email.toString(),
+                            imageUrl,
+                            it.result.toString()
+                        )
+
+                        databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + '/' + auth.currentUser?.uid.toString())
+                            .setValue(upload)
+
+                        Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT).show()
+
+                        finish()
+
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .addOnFailureListener {
+                btnPost.alpha = 1f
+                btnPost.isClickable = true
+                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+            }
+
     }
 
 }

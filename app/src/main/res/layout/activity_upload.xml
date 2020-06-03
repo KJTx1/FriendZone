@@ -9,7 +9,9 @@
     android:layout_gravity="center"
     android:background="#F4F4F4"
     tools:context=".Upload"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    android:focusableInTouchMode="true"
+    android:focusable="true" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -132,9 +134,7 @@
                 android:orientation="vertical"
                 android:background="#FFFFFF"
                 android:layout_marginTop="15dp"
-                android:padding="12dp"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true">
+                android:padding="12dp" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,8 +153,8 @@
                     android:layout_marginEnd="6dp"
                     android:inputType="text"
                     android:hint="Choose one word to describe your mood"
-                    android:textSize="16dp"
-                    android:paddingBottom="15dp"/>
+                    android:textSize="16sp"
+                    android:paddingBottom="15dp" />
 
 
             </LinearLayout>
