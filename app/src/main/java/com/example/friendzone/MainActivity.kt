@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.provider.FontRequest
+import androidx.emoji.text.EmojiCompat
+import androidx.emoji.text.FontRequestEmojiCompatConfig
 import com.example.friendzone.UserContent.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +30,18 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
+        /*
+        val fontRequest = FontRequest(
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            "Noto Color Emoji Compat",
+            R.array.com_google_android_gms_fonts_certs
+        )
+        val config = FontRequestEmojiCompatConfig(this, fontRequest)
+        EmojiCompat.init(config)
+
+         */
+
     }
 
     private fun loginUser() {

@@ -3,7 +3,9 @@
     package="com.example.friendzone">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <meta-data
+            android:name="fontProviderRequests"
+            android:value="Noto Color Emoji Compat" />
     <application
         android:name=".FriendZoneApp"
         android:allowBackup="true"
