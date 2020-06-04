@@ -7,5 +7,6 @@ data class UploadManager (
      var postDesc: String? = null,
      var userEmail: String? = null,
      var imageUrl: String? = null,
-     var audioUrl: String? = null
+     var audioUrl: String? = null,
+     var userID: String? = null
 )

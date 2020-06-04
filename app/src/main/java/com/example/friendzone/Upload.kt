@@ -2,11 +2,14 @@ package com.example.friendzone
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -93,9 +96,9 @@ class Upload : AppCompatActivity() {
         }
 
         btnRecord.setOnClickListener {
+
             if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 ActivityCompat.requestPermissions(this, permissions,0)
             } else if (!isRecording) {
@@ -135,7 +138,16 @@ class Upload : AppCompatActivity() {
         })
 
         btnPost.setOnClickListener {
-            uploadFile()
+            if (isRecording) {
+                stopRecording()
+            }
+
+            if (isNetworkAvailable(this)) {
+                uploadFile()
+            } else {
+                Toast.makeText(this, "Please connect to the Internet first!", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
 
         storageRef = FirebaseStorage.getInstance().getReference("uploads")
@@ -320,6 +332,26 @@ class Upload : AppCompatActivity() {
         }
     }
 
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val nw      = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+            return when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                //for other device how are able to connect with Ethernet
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                //for check internet over Bluetooth
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+                else -> false
+            }
+        } else {
+            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
+            return nwInfo.isConnected
+        }
+    }
+
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
@@ -346,8 +378,6 @@ class Upload : AppCompatActivity() {
 
             fileReference.putFile(imageUri!!)
                 .addOnSuccessListener { task ->
-                    btnPost.alpha = 1f
-                    btnPost.isClickable = true
 
                     task.storage.downloadUrl
                         .addOnCompleteListener {
@@ -362,10 +392,11 @@ class Upload : AppCompatActivity() {
                                     etDescription.text.toString(),
                                     auth.currentUser?.email.toString(),
                                     it.result.toString(),
-                                    ""
+                                    "",
+                                    auth.currentUser?.uid.toString()
                                 )
 
-                                databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + '/' + auth.currentUser?.uid.toString())
+                                databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
                                     .setValue(upload)
 
                                 Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT)
@@ -421,10 +452,11 @@ class Upload : AppCompatActivity() {
                             etDescription.text.toString(),
                             auth.currentUser?.email.toString(),
                             imageUrl,
-                            it.result.toString()
+                            it.result.toString(),
+                            auth.currentUser?.uid.toString()
                         )
 
-                        databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + '/' + auth.currentUser?.uid.toString())
+                        databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
                             .setValue(upload)
 
                         Toast.makeText(this, "Upload Successful!", Toast.LENGTH_SHORT).show()
