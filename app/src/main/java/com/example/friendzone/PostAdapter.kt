@@ -62,8 +62,7 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
             }
 
             btnReact.setOnClickListener {
-                onReactClickListener?.invoke(post)
-                toggle(spnReactions)
+                createPopupWindow(position).showAsDropDown(btnReact)
             }
 
             if(post.reactions.isNotEmpty()) {
@@ -79,6 +78,23 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
                 View.VISIBLE
             }
         }
+    }
+
+    private fun createPopupWindow(itemPosition: Int): PopupWindow {
+        val popupMenuView = LayoutInflater.from(parent).inflate(R.layout.emoji_selection_popup, null).apply {
+            findViewById<ImageView>(R.id.btnHairFace).setOnClickListener {
+                Toast.makeText(context, "Hair Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            }
+            findViewById<ImageView>(R.id.btnGroup).setOnClickListener {
+                Toast.makeText(context, "Group Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            }
+            findViewById<ImageView>(R.id.btnSmiley).setOnClickListener {
+                Toast.makeText(context, "Smiley Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        return PopupWindow(popupMenuView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
     }
 
     companion object {

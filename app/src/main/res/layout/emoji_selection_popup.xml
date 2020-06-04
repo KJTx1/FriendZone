@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/paddingLarge"
+    android:background="@drawable/white_rect_black_outline"
+    >
+
+    <ImageView
+        android:id="@+id/btnSmiley"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:src="@drawable/ic_happy"
+        android:foreground="?selectableItemBackground"
+        android:tint="#4CAF50"/>
+
+    <ImageView
+        android:id="@+id/btnHairFace"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:src="@drawable/ic_hair_face"
+        android:foreground="?selectableItemBackground"
+        android:tint="#00f"/>
+
+    <ImageView
+        android:id="@+id/btnGroup"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:src="@drawable/ic_group_face"
+        android:foreground="?selectableItemBackground"
+        android:tint="#FF9800"/>
+
+</LinearLayout>
