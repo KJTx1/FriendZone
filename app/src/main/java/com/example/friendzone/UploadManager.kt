@@ -1,6 +1,6 @@
 package com.example.friendzone
 
-data class UploadManager (
+data class UploadManager(
      var userName: String? = null,
      var timeStamp: Long? = null,
      var shareTo: String? = null,
@@ -8,5 +8,6 @@ data class UploadManager (
      var userEmail: String? = null,
      var imageUrl: String? = null,
      var audioUrl: String? = null,
-     var userID: String? = null
+     var userID: String? = null,
+     var reacation: Map<String, String>? = null
 )

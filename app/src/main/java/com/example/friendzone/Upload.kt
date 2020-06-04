@@ -17,7 +17,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
@@ -150,8 +149,8 @@ class Upload : AppCompatActivity() {
             }
         }
 
-        storageRef = FirebaseStorage.getInstance().getReference("uploads")
-        databaseRef = FirebaseDatabase.getInstance().getReference("uploads")
+        storageRef = FirebaseStorage.getInstance().getReference("groups")
+        databaseRef = FirebaseDatabase.getInstance().getReference("groups")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -393,7 +392,8 @@ class Upload : AppCompatActivity() {
                                     auth.currentUser?.email.toString(),
                                     it.result.toString(),
                                     "",
-                                    auth.currentUser?.uid.toString()
+                                    auth.currentUser?.uid.toString(),
+                                    emptyMap()
                                 )
 
                                 databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
@@ -453,7 +453,8 @@ class Upload : AppCompatActivity() {
                             auth.currentUser?.email.toString(),
                             imageUrl,
                             it.result.toString(),
-                            auth.currentUser?.uid.toString()
+                            auth.currentUser?.uid.toString(),
+                            emptyMap()
                         )
 
                         databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
