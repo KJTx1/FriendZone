@@ -50,16 +50,15 @@ class UserContent : AppCompatActivity() {
         btnLogout.setOnClickListener {
             logout()
         }
-        /*
-        btnGroupFeed.setOnClickListener {
-            val intent = Intent(this, GroupFeed::class.java)
-            startActivity(intent)
-        }
-         */
+
         groupManager = (application as FriendZoneApp).groupManager
         groupManager.getGroups({ groupList ->
             listOfGroups = groupList.groupList.toMutableList()
             groupAdapter = GroupAdapter(listOfGroups)
+            groupAdapter.onGroupClickListener = {selectedGroup: Group ->
+                val intent = Intent(this, GroupFeed::class.java)
+                startActivity(intent)
+            }
             rvGroups.adapter = groupAdapter
         }, {
             Log.i("info", "Error fetching groups")

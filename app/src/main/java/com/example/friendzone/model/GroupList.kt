@@ -7,3 +7,4 @@ import kotlinx.android.parcel.Parcelize
 data class GroupList(
     val groupList: List<Group>
 ) : Parcelable
+

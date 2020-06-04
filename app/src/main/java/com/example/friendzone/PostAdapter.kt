@@ -55,7 +55,6 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
             var reactions = arrayOf(HAPPY, LAUGH, SAD, ANGRY, SURPRISE).toMutableList()
             var adapter = ArrayAdapter(parent, android.R.layout.simple_list_item_1, reactions)
             spnReactions.adapter = adapter
-            // spnReactions.onItemSelectedListener = parent
             spnReactions.visibility = View.GONE
 
             itemView.setOnClickListener {
