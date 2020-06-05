@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "966092626614-sv6dh1pht05odn3u1tnib7dhagmbm9vk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.friendzone",
+            "certificate_hash": "165db5b962bf95c048a99557c27dc1afd0c9be67"
+          }
+        },
+        {
           "client_id": "966092626614-sbee2jklb4ke189j1u99ri4pedcuv8sj.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -13,11 +13,12 @@ class FriendZoneApp: Application() {
 
 //    lateinit var sessionManager: SessionManager
 
-//    var user: FirebaseUser? = null
+//    lateinit var uploadManager: UploadManager
 
     override fun onCreate() {
         super.onCreate()
         auth = Firebase.auth
 
+//        uploadManager = UploadManager(this)
     }
 }

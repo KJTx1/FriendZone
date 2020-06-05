@@ -41,6 +41,10 @@ class UserContent : AppCompatActivity() {
         btnLogout.setOnClickListener {
             logout()
         }
+
+        btnAdd.setOnClickListener {
+            startActivity(Intent(this, Upload::class.java))
+        }
     }
 
     private fun logout() {
