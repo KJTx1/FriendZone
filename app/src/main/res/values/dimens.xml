@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region Standard Padding -->
+    <dimen name="paddingXXXLarge">32dp</dimen>
+    <dimen name="paddingXXLarge">24dp</dimen>
+    <dimen name="paddingXLarge">16dp</dimen>
+    <dimen name="paddingLarge">12dp</dimen>
+    <dimen name="paddingXMedium">10dp</dimen>
+    <dimen name="paddingMedium">8dp</dimen>
+    <dimen name="paddingSmall">4dp</dimen>
+    <dimen name="paddingXSmall">2dp</dimen>
+    <dimen name="emoji_size">40dp</dimen>
+    <!--  endregion Standard Padding  -->
+</resources>

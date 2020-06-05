@@ -10,6 +10,6 @@ data class Post(
     val user: String,
     val image: String,
     val audio: String,
-    val timestamp: Date,
+    val timestamp: String,
     val reactions: List<Reaction>
 ) : Parcelable
