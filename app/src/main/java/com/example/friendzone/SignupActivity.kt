@@ -10,6 +10,7 @@ import com.example.friendzone.UserContent.Companion.USER_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.android.synthetic.main.activity_upload.*
 
 
 class SignupActivity : AppCompatActivity() {
@@ -63,6 +64,12 @@ class SignupActivity : AppCompatActivity() {
                                     )
                                 }
                             }
+
+                        // Add user UID and email to user database
+                        val userSavepoint = (application as FriendZoneApp).lookupDatabaseRef.child("user").child(auth.currentUser?.uid.toString())
+                        userSavepoint.child("email").setValue(auth.currentUser?.email.toString())
+                        userSavepoint.child("userName").setValue(auth.currentUser?.displayName.toString())
+                        userSavepoint.child("uid").setValue(auth.currentUser?.uid.toString())
 
                         val intent = Intent(this, UserContent::class.java).apply {
                             putExtra(USER_KEY, user)

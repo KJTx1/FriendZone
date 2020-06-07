@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#FFFFFF"
+            android:background="@color/white"
             app:srcCompat="@drawable/ic_camera_foreground"
             android:adjustViewBounds="true"
             android:foreground="?android:attr/selectableItemBackground" />
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#F4F4F4"
+            android:background="@color/backgroundGrey"
             app:srcCompat="@drawable/ic_choose_photo_foreground"
             android:adjustViewBounds="true"
             android:scaleX="1.2"
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="#FFFFFF"
+                android:background="@color/white"
                 android:layout_marginTop="15dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#FFFFFF"
+                android:background="@color/white"
                 android:layout_marginTop="15dp"
                 android:padding="12dp" >
 

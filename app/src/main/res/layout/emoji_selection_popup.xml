@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:padding="@dimen/paddingLarge"
     android:background="@drawable/white_rect_black_outline"
+    android:elevation="12dp"
     >
 
     <ImageView

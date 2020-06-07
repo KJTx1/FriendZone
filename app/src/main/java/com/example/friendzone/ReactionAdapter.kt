@@ -26,9 +26,11 @@ class ReactionAdapter(private val initialListOfReactions: List<Reaction>): Recyc
 
     inner class ReactionViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val tvReactionUser = itemView.findViewById<TextView>(R.id.tvReactionUser)
+        private val tvReaction = itemView.findViewById<TextView>(R.id.tvReaction)
 
         fun bind(reaction: Reaction) {
             tvReactionUser.text = reaction.user
+            tvReaction.text = reaction.reaction
         }
     }
 

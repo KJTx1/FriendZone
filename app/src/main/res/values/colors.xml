@@ -8,4 +8,5 @@
     <color name="white">#FFF</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="red">#F00</color>
+    <color name="backgroundGrey">#F4F4F4</color>
 </resources>

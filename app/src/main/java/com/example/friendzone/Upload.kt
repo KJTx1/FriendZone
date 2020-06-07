@@ -141,10 +141,10 @@ class Upload : AppCompatActivity() {
                 stopRecording()
             }
 
-            if (isNetworkAvailable(this)) {
+            if ((application as FriendZoneApp).internetManager.isNetworkAvailable(this)) {
                 uploadFile()
             } else {
-                Toast.makeText(this, "Please connect to the Internet first!", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -331,25 +331,25 @@ class Upload : AppCompatActivity() {
         }
     }
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val nw      = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-            return when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                //for other device how are able to connect with Ethernet
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                //for check internet over Bluetooth
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-                else -> false
-            }
-        } else {
-            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
-            return nwInfo.isConnected
-        }
-    }
+//    private fun isNetworkAvailable(context: Context): Boolean {
+//        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            val nw      = connectivityManager.activeNetwork ?: return false
+//            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+//            return when {
+//                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+//                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+//                //for other device how are able to connect with Ethernet
+//                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+//                //for check internet over Bluetooth
+//                actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+//                else -> false
+//            }
+//        } else {
+//            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
+//            return nwInfo.isConnected
+//        }
+//    }
 
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -393,7 +393,7 @@ class Upload : AppCompatActivity() {
                                     it.result.toString(),
                                     "",
                                     auth.currentUser?.uid.toString(),
-                                    emptyMap()
+                                    emptyList()
                                 )
 
                                 databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
@@ -454,7 +454,7 @@ class Upload : AppCompatActivity() {
                             imageUrl,
                             it.result.toString(),
                             auth.currentUser?.uid.toString(),
-                            emptyMap()
+                            emptyList()
                         )
 
                         databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())

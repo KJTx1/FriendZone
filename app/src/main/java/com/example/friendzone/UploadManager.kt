@@ -1,5 +1,7 @@
 package com.example.friendzone
 
+import com.example.friendzone.model.Reaction
+
 data class UploadManager(
      var userName: String? = null,
      var timeStamp: Long? = null,
@@ -9,5 +11,5 @@ data class UploadManager(
      var imageUrl: String? = null,
      var audioUrl: String? = null,
      var userID: String? = null,
-     var reacation: Map<String, String>? = null
+     var reaction: List<Reaction> = emptyList()
 )

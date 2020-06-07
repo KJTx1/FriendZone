@@ -20,7 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
         val background = object: Thread() {
             override fun run() {
                 super.run()
-                var intent: Intent? = null
+                var intent: Intent?
                 try {
                     Thread.sleep(2000)
                     if (auth.currentUser != null) {

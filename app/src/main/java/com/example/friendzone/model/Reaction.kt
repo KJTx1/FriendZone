@@ -6,8 +6,6 @@ import java.util.*
 
 @Parcelize
 data class Reaction(
-    val id: String,
-    val user: String,
-    val reaction: String,
-    val timestamp: String
+    val user: String? = null,
+    val reaction: String? = null
 ) : Parcelable

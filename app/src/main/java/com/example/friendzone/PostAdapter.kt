@@ -1,23 +1,31 @@
 package com.example.friendzone
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.friendzone.manager.PostManager
 import com.example.friendzone.model.Post
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+
+class PostAdapter(private val initialListOfPosts: List<UploadManager>): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     private lateinit var parent: Context
-    private var listOfPosts: List<Post> = initialListOfPosts.toList()
+    private var listOfPosts: List<UploadManager> = initialListOfPosts.toList()
     private lateinit var reactionAdapter: ReactionAdapter
 
-    var onPostClickListener: ((post: Post) -> Unit)? = null
-    var onReactClickListener: ((post: Post) -> Unit)? = null
+    var onPostClickListener: ((post: UploadManager) -> Unit)? = null
+
+    private var touchX: Int? = null
+    private var touchY: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post, parent, false)
@@ -28,12 +36,12 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
     override fun getItemCount() = listOfPosts.size
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post: Post = listOfPosts[position]
+        val post: UploadManager = listOfPosts[position]
         holder.bind(post)
     }
 
 
-    fun change(newPosts: List<Post>) {
+    fun change(newPosts: List<UploadManager>) {
         listOfPosts = newPosts
         notifyDataSetChanged()
     }
@@ -43,30 +51,36 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
         private val ivPostImage = itemView.findViewById<ImageView>(R.id.ivPostImage)
         private val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
         private val rvPostReactions = itemView.findViewById<RecyclerView>(R.id.rvPostReactions)
-        private val btnReact = itemView.findViewById<Button>(R.id.btnReact)
-        private val spnReactions = itemView.findViewById<Spinner>(R.id.spnReactions)
 
+        @SuppressLint("ClickableViewAccessibility")
+        fun bind(post: UploadManager) {
+            tvUsername.text = post.userName
+            Picasso.get().load(post.imageUrl).into(ivPostImage)
+            tvTimestamp.text = convertLongToTime(post.timeStamp!!)
 
-        fun bind(post: Post) {
-            tvUsername.text = post.user
-            Picasso.get().load(post.image).into(ivPostImage)
-            tvTimestamp.text = post.timestamp.toString()
 
             var reactions = arrayOf(HAPPY, LAUGH, SAD, ANGRY, SURPRISE).toMutableList()
             var adapter = ArrayAdapter(parent, android.R.layout.simple_list_item_1, reactions)
-            spnReactions.adapter = adapter
-            spnReactions.visibility = View.GONE
 
             itemView.setOnClickListener {
                 onPostClickListener?.invoke(post)
             }
 
-            btnReact.setOnClickListener {
-                createPopupWindow(position).showAsDropDown(btnReact)
+            ivPostImage.setOnTouchListener { v, event ->
+                touchX = event.rawX.toInt()
+                touchY = event.rawY.toInt()
+
+                false
             }
 
-            if(post.reactions.isNotEmpty()) {
-                reactionAdapter = ReactionAdapter(post.reactions)
+            ivPostImage.setOnLongClickListener {
+                createPopupWindow(position).showAtLocation(ivPostImage, 0, touchX!!, touchY!!)
+
+                true
+            }
+
+            if(post.reaction.isNotEmpty()) {
+                reactionAdapter = ReactionAdapter(post.reaction)
                 rvPostReactions.adapter = reactionAdapter
             }
         }
@@ -107,6 +121,12 @@ class PostAdapter(private val initialListOfPosts: List<Post>): RecyclerView.Adap
         fun getEmoji(unicode: Int): String {
             return String(Character.toChars(unicode))
         }
+    }
+
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        return format.format(date)
     }
 
 }

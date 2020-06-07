@@ -35,4 +35,7 @@ class GroupManager(context: Context) {
         queue.add(request)
     }
 
+    fun getGroups() {
+
+    }
 }
