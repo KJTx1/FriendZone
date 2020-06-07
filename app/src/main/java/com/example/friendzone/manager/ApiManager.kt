@@ -69,71 +69,70 @@ class ApiManager(databaseRef: DatabaseReference) {
         var userName: String? = null
 
         val userSearch = dbRef.child("user")
+        Log.i("USER", user)
 
-        if (!updated) {
-            userSearch.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (ds in dataSnapshot.children) {
-                        Log.i("USER", "num")
-                        val userEmail = ds.child("email").getValue(String::class.java)
-                        if (user == userEmail) {
-                            findUser = true
-                            userName = ds.child("userName").toString()
+        userSearch.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.i("USER", user)
+                for (ds in dataSnapshot.children) {
+                    val userEmail = ds.child("email").getValue(String::class.java)
+                    if (user == userEmail) {
+                        findUser = true
+                        userName = ds.child("userName").toString()
 
-                            var userGroup = ds.child("groupList").value
-                            if (userGroup != null) {
-                                val groupList = userGroup as MutableList<String>
-                                groupList.add(group)
+                        var userGroup = ds.child("groupList").value
+                        if (userGroup != null) {
+                            val groupList = userGroup as MutableList<String>
+                            groupList.add(group)
 //                            userGroup = userGroup as MutableList<String>
 //                            userGroup = userGroup.add(group)
 
-//                                if (!updated) {
-                                    userSearch.child(ds.child("uid").value as String)
-                                        .child("groupList")
-                                        .setValue(groupList)
-                                    updated = true
-                                    Toast.makeText(
-                                        context,
-                                        "added $user to $group",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-//                                }
+                            if (!updated) {
+                                userSearch.child(ds.child("uid").value as String)
+                                    .child("groupList")
+                                    .setValue(groupList)
+                                updated = true
+                                Toast.makeText(
+                                    context,
+                                    "added $user to $group",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-                            } else {
-                                val groupList = arrayListOf<String>()
-                                groupList.add(group)
+                        } else {
+                            val groupList = arrayListOf<String>()
+                            groupList.add(group)
 
-//                                if (!updated) {
-                                    userSearch.child(ds.child("uid").value as String)
-                                        .child("groupList")
-                                        .setValue(groupList)
-                                    updated = true
-                                    Toast.makeText(
-                                        context,
-                                        "added $user to $group",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-//                                }
-
+                            if (!updated) {
+                                userSearch.child(ds.child("uid").value as String)
+                                    .child("groupList")
+                                    .setValue(groupList)
+                                updated = true
+                                Toast.makeText(
+                                    context,
+                                    "added $user to $group",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
 
                         }
-                    }
-                    if (findUser) {
-                        onSuccess.invoke(userName!!)
-                    } else {
-                        Log.i("USER", user)
-                        onError?.invoke()
+
                     }
                 }
-
-
-                override fun onCancelled(p0: DatabaseError) {
+                if (findUser) {
+                    onSuccess.invoke(userName!!)
+                } else {
+                    Log.i("USER", user)
                     onError?.invoke()
                 }
+            }
 
-            })
-        }
+
+            override fun onCancelled(p0: DatabaseError) {
+                onError?.invoke()
+            }
+
+        })
     }
 
 
