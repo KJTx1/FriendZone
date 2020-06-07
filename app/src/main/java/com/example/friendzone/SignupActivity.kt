@@ -68,7 +68,7 @@ class SignupActivity : AppCompatActivity() {
                         // Add user UID and email to user database
                         val userSavepoint = (application as FriendZoneApp).lookupDatabaseRef.child("user").child(auth.currentUser?.uid.toString())
                         userSavepoint.child("email").setValue(auth.currentUser?.email.toString())
-                        userSavepoint.child("userName").setValue(auth.currentUser?.displayName.toString())
+                        userSavepoint.child("userName").setValue(displayName)
                         userSavepoint.child("uid").setValue(auth.currentUser?.uid.toString())
 
                         val intent = Intent(this, UserContent::class.java).apply {
