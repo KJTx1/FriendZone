@@ -17,6 +17,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
@@ -26,8 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_upload.*
@@ -70,7 +70,25 @@ class Upload : AppCompatActivity() {
         btnPost.alpha = .5f;
         btnPost.isClickable = false;
 
-        var groups = arrayOf("group 1", "group 2", "group 3", "group 4", "group 5", "group 6")
+//        var userDir = (application as FriendZoneApp).lookupDatabaseRef.child("user").child(auth.currentUser!!.uid)
+//        userDir.addValueEventListener(
+//            object : ValueEventListener {
+//                override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                    val groups = dataSnapshot.child("groupList").value as List<String>
+//
+//                    var adapter = ArrayAdapter(this@Upload, android.R.layout.simple_list_item_1, groups)
+//                    groupSpinner.adapter = adapter
+//                }
+//
+//                override fun onCancelled(p0: DatabaseError) {
+//                }
+//
+//        })
+
+        Log.i("Jason", (application as FriendZoneApp).userGroups.toString())
+        var groups = (application as FriendZoneApp).userGroups.toTypedArray()
+
+//        var groups = arrayOf("group 1", "group 2", "group 3", "group 4", "group 5", "group 6")
         var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, groups)
         groupSpinner.adapter = adapter
 
@@ -396,6 +414,7 @@ class Upload : AppCompatActivity() {
                                     emptyList()
                                 )
 
+                                Log.i("CLICK", groupSpinner.selectedItem.toString())
                                 databaseRef.child(groupSpinner.selectedItem.toString() + '/' + currentTime.toString() + auth.currentUser?.uid.toString())
                                     .setValue(upload)
 

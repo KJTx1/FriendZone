@@ -85,6 +85,8 @@ class UserContent : AppCompatActivity() {
                         listOfGroups.add(ds.value.toString())
                     }
 
+                    (application as FriendZoneApp).userGroups = listOfGroups
+
                     var groupQueue: Queue<String> = LinkedList(listOfGroups)
                     fetchNext(groupQueue)
 

@@ -15,6 +15,7 @@ class FriendZoneApp: Application() {
     lateinit var postManager: PostManager
     lateinit var groupManager: GroupManager
     lateinit var lookupDatabaseRef: DatabaseReference
+    lateinit var userGroups: List<String>
 //    lateinit var sessionManager: SessionManager
 
 //    lateinit var uploadManager: UploadManager
@@ -28,6 +29,7 @@ class FriendZoneApp: Application() {
         super.onCreate()
         auth = Firebase.auth
         lookupDatabaseRef = FirebaseDatabase.getInstance().reference
+        userGroups = emptyList()
 
         internetManager = InternetManager()
         postManager = PostManager(this)
