@@ -70,27 +70,27 @@ class Upload : AppCompatActivity() {
         btnPost.alpha = .5f;
         btnPost.isClickable = false;
 
-//        var userDir = (application as FriendZoneApp).lookupDatabaseRef.child("user").child(auth.currentUser!!.uid)
-//        userDir.addValueEventListener(
-//            object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    val groups = dataSnapshot.child("groupList").value as List<String>
-//
-//                    var adapter = ArrayAdapter(this@Upload, android.R.layout.simple_list_item_1, groups)
-//                    groupSpinner.adapter = adapter
-//                }
-//
-//                override fun onCancelled(p0: DatabaseError) {
-//                }
-//
-//        })
+        var userDir = (application as FriendZoneApp).lookupDatabaseRef.child("user").child(auth.currentUser!!.uid)
+        userDir.addValueEventListener(
+            object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val groups = dataSnapshot.child("groupList").value as List<String>
 
-        Log.i("Jason", (application as FriendZoneApp).userGroups.toString())
-        var groups = (application as FriendZoneApp).userGroups.toTypedArray()
+                    var adapter = ArrayAdapter(this@Upload, android.R.layout.simple_list_item_1, groups)
+                    groupSpinner.adapter = adapter
+                }
 
-//        var groups = arrayOf("group 1", "group 2", "group 3", "group 4", "group 5", "group 6")
-        var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, groups)
-        groupSpinner.adapter = adapter
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+        })
+
+//        Log.i("Jason", (application as FriendZoneApp).userGroups.toString())
+//        var groups = (application as FriendZoneApp).userGroups.toTypedArray()
+//
+////        var groups = arrayOf("group 1", "group 2", "group 3", "group 4", "group 5", "group 6")
+//        var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, groups)
+//        groupSpinner.adapter = adapter
 
         btnPlay.visibility = View.GONE
         btnPlay.isEnabled = false
@@ -266,7 +266,6 @@ class Upload : AppCompatActivity() {
         btnPlay.setImageResource(R.drawable.ic_play_foreground)
 
         try {
-//            Set Timeout
             mediaRecorder?.stop()
             mediaRecorder?.release()
 

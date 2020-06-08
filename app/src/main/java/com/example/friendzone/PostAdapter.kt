@@ -2,6 +2,7 @@ package com.example.friendzone
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -21,6 +22,10 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
     private lateinit var parent: Context
     private var listOfPosts: List<UploadManager> = initialListOfPosts.toList()
     private lateinit var reactionAdapter: ReactionAdapter
+
+    private var mediaPlayer: MediaPlayer? = null
+
+    private var audio : String? = null
 
     var onPostClickListener: ((post: UploadManager) -> Unit)? = null
 
@@ -64,6 +69,35 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
 
             itemView.setOnClickListener {
                 onPostClickListener?.invoke(post)
+            }
+
+            ivPostImage.setOnClickListener {
+                if (post.audioUrl != "") {
+                    try {
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer().apply {
+                                setDataSource(post.audioUrl)
+                                prepare()
+                                start()
+                            }
+                            audio = post.audioUrl
+                        } else if (mediaPlayer != null && audio != post.audioUrl) {
+                            mediaPlayer!!.stop()
+                            mediaPlayer = MediaPlayer().apply {
+                                setDataSource(post.audioUrl)
+                                prepare()
+                                start()
+                            }
+                            audio = post.audioUrl
+                        } else {
+                            mediaPlayer!!.stop()
+                            mediaPlayer = null
+                        }
+
+                    } catch (e: Exception) {
+                    e.printStackTrace()
+                    }
+                }
             }
 
             ivPostImage.setOnTouchListener { v, event ->
