@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="50px">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/ivPostImage"
@@ -48,5 +49,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
+
+    <ImageView
+        android:id="@+id/ivPlay"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPostImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_has_audio_foreground" />
+
+    <TextView
+        android:id="@+id/tvDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text=""
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/ivPostImage"
+        app:layout_constraintStart_toEndOf="@+id/tvUsername"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

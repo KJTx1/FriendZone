@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.log
 
 class ApiManager(databaseRef: DatabaseReference) {
     var dbRef = databaseRef
@@ -63,24 +64,30 @@ class ApiManager(databaseRef: DatabaseReference) {
         })
     }
 
-    fun addUser(user: String, group: String, onSuccess: (String) -> Unit, onError: (() -> Unit)? = null, context: Context) {
+    fun addUser(user: String, group: String, onSuccess: (String) -> Unit, onError: (() -> Unit)? = null, context: Context, createGroup: Boolean) {
         var findUser = false
         var updated = false
+        var groupMemberUpdated = false
         var userName: String? = null
 
+
         val userSearch = dbRef.child("user")
-        Log.i("USER", user)
 
         userSearch.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.i("USER", user)
+
                 for (ds in dataSnapshot.children) {
                     val userEmail = ds.child("email").getValue(String::class.java)
+
                     if (user == userEmail) {
+                        Log.i("USER", "find")
                         findUser = true
-                        userName = ds.child("userName").toString()
+                        userName = ds.child("userName").value.toString()
 
                         var userGroup = ds.child("groupList").value
+
+
+
                         if (userGroup != null) {
                             val groupList = userGroup as MutableList<String>
                             groupList.add(group)
@@ -117,22 +124,59 @@ class ApiManager(databaseRef: DatabaseReference) {
 
                         }
 
+                        if (!createGroup) {
+                            val groupMembers = dbRef.child("groups").child(group).child("members")
+                            groupMembers.addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    if (!groupMemberUpdated) {
+                                        val member = dataSnapshot.value as MutableList<String>
+                                        member.add(userName!!)
+                                        Log.i("XXX", member.toString())
+                                        groupMembers.setValue(member)
+
+                                        groupMemberUpdated = true
+                                    }
+                                }
+
+                                override fun onCancelled(p0: DatabaseError) {
+                                    onError?.invoke()
+                                }
+                            })
+                        } else {
+                            val groupMembers = dbRef.child("groups").child(group).child("members")
+                            groupMembers.addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(p0: DataSnapshot) {
+                                    if (!groupMemberUpdated) {
+                                        val memberList = arrayListOf<String>()
+                                        memberList.add(userName!!)
+
+                                        groupMembers.setValue(memberList)
+
+                                        groupMemberUpdated = true
+                                    }
+                                }
+
+                                override fun onCancelled(p0: DatabaseError) {
+                                }
+                            })
+                        }
+
                     }
                 }
-                if (findUser) {
-                    onSuccess.invoke(userName!!)
-                } else {
-                    Log.i("USER", user)
-                    onError?.invoke()
-                }
+//                if (findUser) {
+//                    onSuccess.invoke(userName!!)
+//                } else {
+//                    Log.i("USER", user)
+//                    onError?.invoke()
+//                }
             }
 
 
             override fun onCancelled(p0: DatabaseError) {
                 onError?.invoke()
             }
-
         })
+
     }
 
 

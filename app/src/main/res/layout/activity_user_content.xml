@@ -12,9 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log out"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rvGroups"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -26,12 +28,13 @@
         android:text="Username"
         android:textSize="50px"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginRight="3dp"
+        app:layout_constraintBottom_toTopOf="@id/rvGroups"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toEndOf="@+id/btnLogout"
+        app:layout_constraintStart_toEndOf="@+id/tvLogo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+         />
 
     <ImageButton
         android:id="@+id/btnAdd"
@@ -41,7 +44,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_foreground"
+        app:srcCompat="@drawable/ic_create_group_foreground"
         android:layout_margin="10dp"
         android:contentDescription="Add new post"
         android:elevation="16dp"/>
@@ -56,6 +59,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="0dp"
         android:backgroundTint="@color/transparent"/>
+
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FriendZone 👪"
+        app:layout_constraintBottom_toTopOf="@+id/rvGroups"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:textSize="60px"
+        android:gravity="center_horizontal"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

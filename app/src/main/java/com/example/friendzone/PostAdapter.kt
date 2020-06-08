@@ -56,19 +56,28 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
         private val ivPostImage = itemView.findViewById<ImageView>(R.id.ivPostImage)
         private val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
         private val rvPostReactions = itemView.findViewById<RecyclerView>(R.id.rvPostReactions)
+        private val ivPlay = itemView.findViewById<ImageView>(R.id.ivPlay)
+        private val tvDesc = itemView.findViewById<TextView>(R.id.tvDesc)
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(post: UploadManager) {
             tvUsername.text = post.userName
             Picasso.get().load(post.imageUrl).into(ivPostImage)
             tvTimestamp.text = convertLongToTime(post.timeStamp!!)
-
-
-            var reactions = arrayOf(HAPPY, LAUGH, SAD, ANGRY, SURPRISE).toMutableList()
+            tvDesc.text = "is feeling ${post.postDesc}"
+            val hasAudio = post.audioUrl != ""
+            val reactions = arrayOf(HAPPY, LAUGH, SAD, ANGRY, SURPRISE).toMutableList()
             var adapter = ArrayAdapter(parent, android.R.layout.simple_list_item_1, reactions)
+
 
             itemView.setOnClickListener {
                 onPostClickListener?.invoke(post)
+            }
+
+            if (!hasAudio) {
+                ivPlay.visibility = View.GONE
+            } else {
+                ivPlay.visibility = View.VISIBLE
             }
 
             ivPostImage.setOnClickListener {
@@ -95,7 +104,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
                         }
 
                     } catch (e: Exception) {
-                    e.printStackTrace()
+                        e.printStackTrace()
                     }
                 }
             }

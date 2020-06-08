@@ -30,11 +30,16 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_feed)
         app = (application as FriendZoneApp)
+        tvNoPost.visibility = View.GONE
+        btnAdd.alpha = .5F
 
         val groupName = intent.getStringExtra("GROUP_NAME")
         tvGroupFeedTitle.text = groupName
         app.apiManager.fetchPost(groupName, { posts ->
             Log.i("size", posts.size.toString())
+            if (posts.size == 0) {
+                tvNoPost.visibility = View.VISIBLE
+            }
             postAdapter = PostAdapter(posts)
             rvPostFeed.adapter = postAdapter
         }, {
@@ -42,6 +47,7 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
 
         btnAdd.setOnClickListener {
+            btnAdd.alpha = 1F
             startActivity(Intent(this, Upload::class.java))
         }
 
@@ -60,14 +66,15 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .setPositiveButton("Add"
             ) { _, _ ->
                 val user = taskEditText.text.toString()
-                
+
                 app.apiManager.addUser(user, group, {
 
 //                    Toast.makeText(this, "added $user to $group", Toast.LENGTH_SHORT).show()
                 }, {
-                    Toast.makeText(this, "Fail to added $user to $group", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Fail to added $user to $group", Toast.LENGTH_SHORT).show()
                 },
-                this)
+                this,
+                false)
             }
             .setNegativeButton("Cancel", null)
             .create()
@@ -85,4 +92,8 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun onResume() {
+        super.onResume()
+        btnAdd.alpha = .5F
+    }
 }

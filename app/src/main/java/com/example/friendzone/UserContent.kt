@@ -1,9 +1,11 @@
 package com.example.friendzone
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +47,8 @@ class UserContent : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_content)
 
+        btnAdd.alpha = .5f
+
         apiManager = (application as FriendZoneApp).apiManager
 
         backPressTime = 0
@@ -65,7 +69,8 @@ class UserContent : AppCompatActivity() {
 
 
         btnAdd.setOnClickListener {
-            startActivity(Intent(this, Upload::class.java))
+            btnAdd.alpha = 1f
+            showAddItemDialog()
         }
 
         groupManager = (application as FriendZoneApp).groupManager
@@ -126,8 +131,6 @@ class UserContent : AppCompatActivity() {
 
             })
 
-
-
         }
 
 //        groupManager.getGroups({ groupList ->
@@ -144,6 +147,39 @@ class UserContent : AppCompatActivity() {
 
     }
 
+    private fun showAddItemDialog() {
+        val taskEditText = EditText(this)
+
+        val dialog: AlertDialog = AlertDialog.Builder(this)
+            .setTitle("Create new group")
+            .setMessage("What do you want to name the new group?")
+            .setView(taskEditText)
+            .setPositiveButton("Create"
+            ) { _, _ ->
+                val newGroup = taskEditText.text.toString()
+                Log.i("test", currentUser.email!! + " " + newGroup)
+                if (newGroup.isNotEmpty()) {
+                    apiManager.addUser(currentUser.email!!, newGroup, {
+
+//                    Toast.makeText(this, "added $user to $group", Toast.LENGTH_SHORT).show()
+                    }, {
+//                    Toast.makeText(this, "Fail to added $user to $group", Toast.LENGTH_SHORT).show()
+                    },
+                        this,
+                        true
+                    )
+                }
+                btnAdd.alpha = .5f
+
+            }
+            .setNegativeButton("Cancel") { _, _ -> btnAdd.alpha = .5f}
+            .create()
+
+        dialog.setView(taskEditText, 50 ,0, 50 , 0)
+        dialog.show()
+
+    }
+
     private fun fetchNext(queue: Queue<String>) {
         val group = queue.poll()
         if (group != null) {
@@ -155,7 +191,7 @@ class UserContent : AppCompatActivity() {
         } else {
 
             Log.i("JY", groupMap.toString())
-            Toast.makeText(this, "Finish getting group members information", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Finish getting group members information", Toast.LENGTH_SHORT).show()
 
             groupAdapter = GroupAdapter(groupMap)
             rvGroups.adapter = groupAdapter
@@ -172,6 +208,11 @@ class UserContent : AppCompatActivity() {
         auth.signOut()
         Toast.makeText(this, "User ${tvUser.text} logged out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        btnAdd.alpha = .5f
     }
 
     override fun onBackPressed() {

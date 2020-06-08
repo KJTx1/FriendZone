@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/ic_add_foreground"
         android:layout_margin="10dp"
         android:contentDescription="Add new post"
-        android:elevation="16dp"/>
+        android:elevation="16dp" />
 
     <TextView
         android:id="@+id/tvGroupFeedTitle"
@@ -59,6 +59,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/ripple"/>
+
+    <TextView
+        android:id="@+id/tvNoPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anything Interesting？ 👀"
+        app:layout_constraintBottom_toBottomOf="@+id/rvPostFeed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/black"
+        android:textSize="25dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
