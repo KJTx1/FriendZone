@@ -10,14 +10,16 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.friendzone.manager.ApiManager
 import com.example.friendzone.manager.PostManager
 import com.example.friendzone.model.Post
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_group_feed.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(private val initialListOfPosts: List<UploadManager>): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private val initialListOfPosts: List<UploadManager>, private val application: FriendZoneApp): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     private lateinit var parent: Context
     private var listOfPosts: List<UploadManager> = initialListOfPosts.toList()
     private lateinit var reactionAdapter: ReactionAdapter
@@ -54,6 +56,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(post: UploadManager) {
+            var apiManager = (application as FriendZoneApp).apiManager
             tvUsername.text = post.userName
             Picasso.get().load(post.imageUrl).into(ivPostImage)
             tvTimestamp.text = convertLongToTime(post.timeStamp!!)
@@ -74,7 +77,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
             }
 
             ivPostImage.setOnLongClickListener {
-                createPopupWindow(position).showAtLocation(ivPostImage, 0, touchX!!, touchY!!)
+                createPopupWindow(position, apiManager, post).showAtLocation(ivPostImage, 0, touchX!!, touchY!!)
 
                 true
             }
@@ -94,16 +97,16 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
         }
     }
 
-    private fun createPopupWindow(itemPosition: Int): PopupWindow {
+    private fun createPopupWindow(itemPosition: Int, apiManager: ApiManager, post: UploadManager): PopupWindow {
         val popupMenuView = LayoutInflater.from(parent).inflate(R.layout.emoji_selection_popup, null).apply {
-            findViewById<ImageView>(R.id.btnHairFace).setOnClickListener {
-                Toast.makeText(context, "Hair Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnAngry).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE20", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {},{})
             }
-            findViewById<ImageView>(R.id.btnGroup).setOnClickListener {
-                Toast.makeText(context, "Group Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnSad).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE22", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {},{})
             }
-            findViewById<ImageView>(R.id.btnSmiley).setOnClickListener {
-                Toast.makeText(context, "Smiley Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnHappy).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE03", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {},{})
             }
         }
 

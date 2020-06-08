@@ -3,23 +3,21 @@ package com.example.friendzone
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.friendzone.manager.ApiManager
 import com.example.friendzone.manager.PostManager
 import com.example.friendzone.model.Post
 import kotlinx.android.synthetic.main.activity_group_feed.*
 
 
-class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class GroupFeed : AppCompatActivity() {
 
-    private lateinit var postAdapter: PostAdapter
+    var postAdapter: PostAdapter? = null
     var listOfPosts = mutableListOf<Post>()
     private lateinit var postManager: PostManager
 
@@ -34,8 +32,12 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val groupName = intent.getStringExtra("GROUP_NAME")
         tvGroupFeedTitle.text = groupName
         app.apiManager.fetchPost(groupName, { posts ->
-            Log.i("size", posts.size.toString())
-            postAdapter = PostAdapter(posts)
+            if (postAdapter == null) {
+                postAdapter = PostAdapter(posts, application as FriendZoneApp)
+            } else {
+                Log.i("info", "DATA SET CHANGED")
+                postAdapter!!.change(posts)
+            }
             rvPostFeed.adapter = postAdapter
         }, {
             Toast.makeText(this, "Cannot retrieve user group members information", Toast.LENGTH_SHORT).show()
@@ -60,7 +62,7 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .setPositiveButton("Add"
             ) { _, _ ->
                 val user = taskEditText.text.toString()
-                
+
                 app.apiManager.addUser(user, group, {
 
 //                    Toast.makeText(this, "added $user to $group", Toast.LENGTH_SHORT).show()
@@ -75,14 +77,6 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         dialog.setView(taskEditText, 50 ,0, 50 , 0)
         dialog.show()
 
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
