@@ -3,6 +3,7 @@ package com.example.friendzone
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -11,6 +12,7 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.friendzone.manager.ApiManager
 import com.example.friendzone.manager.PostManager
 import com.example.friendzone.model.Post
 import com.squareup.picasso.Picasso
@@ -18,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(private val initialListOfPosts: List<UploadManager>): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private val initialListOfPosts: List<UploadManager>, private val application: FriendZoneApp): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     private lateinit var parent: Context
     private var listOfPosts: List<UploadManager> = initialListOfPosts.toList()
     private lateinit var reactionAdapter: ReactionAdapter
@@ -61,6 +63,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(post: UploadManager) {
+            var apiManager = (application as FriendZoneApp).apiManager
             tvUsername.text = post.userName
             Picasso.get().load(post.imageUrl).into(ivPostImage)
             tvTimestamp.text = convertLongToTime(post.timeStamp!!)
@@ -117,7 +120,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
             }
 
             ivPostImage.setOnLongClickListener {
-                createPopupWindow(position).showAtLocation(ivPostImage, 0, touchX!!, touchY!!)
+                createPopupWindow(position, apiManager, post).showAtLocation(ivPostImage, 0, touchX!!, touchY!!)
 
                 true
             }
@@ -137,20 +140,24 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>): Recycler
         }
     }
 
-    private fun createPopupWindow(itemPosition: Int): PopupWindow {
+    private fun createPopupWindow(itemPosition: Int, apiManager: ApiManager, post: UploadManager): PopupWindow {
+        var popup: PopupWindow? = null
+
         val popupMenuView = LayoutInflater.from(parent).inflate(R.layout.emoji_selection_popup, null).apply {
-            findViewById<ImageView>(R.id.btnHairFace).setOnClickListener {
-                Toast.makeText(context, "Hair Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnAngry).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE20", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {popup?.dismiss()},{})
             }
-            findViewById<ImageView>(R.id.btnGroup).setOnClickListener {
-                Toast.makeText(context, "Group Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnSad).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE22", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {popup?.dismiss()},{})
             }
-            findViewById<ImageView>(R.id.btnSmiley).setOnClickListener {
-                Toast.makeText(context, "Smiley Emoji has been clicked for position: $itemPosition", Toast.LENGTH_SHORT).show()
+            findViewById<TextView>(R.id.btnHappy).setOnClickListener {
+                apiManager.addReaction(application.auth.currentUser!!.displayName.toString(), "\uD83D\uDE03", post.shareTo.toString(), "${post.timeStamp}${post.userID}", {popup?.dismiss()},{})
             }
         }
 
-        return PopupWindow(popupMenuView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        popup = PopupWindow(popupMenuView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        return popup
 
     }
 

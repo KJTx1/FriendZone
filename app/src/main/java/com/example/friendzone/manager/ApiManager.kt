@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.friendzone.UploadManager
+import com.example.friendzone.model.Reaction
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -179,5 +180,32 @@ class ApiManager(databaseRef: DatabaseReference) {
 
     }
 
+    fun addReaction(user: String, reaction: String, groupName: String, post: String, onSuccess: () -> Unit, onError: (() -> Unit)? = null) {
+        val post = dbRef.child("groups").child(groupName).child(post)
+        var added = false
+        post.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!added) {
+                    val newReaction = Reaction(user, reaction)
+                    var reactionList = dataSnapshot.child("reaction").value
+                    if (reactionList != null) {
+                        var newList = reactionList as MutableList<Reaction>
+                        newList.add(newReaction)
+                        post.child("reaction").setValue(newList)
+
+                    } else {
+                        var newList = arrayListOf<Reaction>()
+                        newList.add(newReaction)
+                        post.child("reaction").setValue(newList)
+                    }
+                    added = true
+                    onSuccess.invoke()
+                }
+            }
+            override fun onCancelled(p0: DatabaseError) {
+                onError?.invoke()
+            }
+        })
+    }
 
 }

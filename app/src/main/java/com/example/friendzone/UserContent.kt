@@ -152,7 +152,7 @@ class UserContent : AppCompatActivity() {
 
         val dialog: AlertDialog = AlertDialog.Builder(this)
             .setTitle("Create new group")
-            .setMessage("What do you want to name the new group?")
+            .setMessage("What's the name of new group?")
             .setView(taskEditText)
             .setPositiveButton("Create"
             ) { _, _ ->

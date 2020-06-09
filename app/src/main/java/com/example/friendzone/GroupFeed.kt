@@ -40,7 +40,7 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             if (posts.size == 0) {
                 tvNoPost.visibility = View.VISIBLE
             }
-            postAdapter = PostAdapter(posts)
+            postAdapter = PostAdapter(posts, app)
             rvPostFeed.adapter = postAdapter
         }, {
             Toast.makeText(this, "Cannot retrieve user group members information", Toast.LENGTH_SHORT).show()

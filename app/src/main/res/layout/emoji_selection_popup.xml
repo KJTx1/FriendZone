@@ -6,30 +6,27 @@
     android:padding="@dimen/paddingLarge"
     android:background="@drawable/white_rect_black_outline"
     android:elevation="12dp"
+    android:id="@+id/reactPopup"
     >
 
-    <ImageView
-        android:id="@+id/btnSmiley"
+    <TextView
+        android:id="@+id/btnHappy"
         android:layout_width="@dimen/emoji_size"
         android:layout_height="@dimen/emoji_size"
-        android:src="@drawable/ic_happy"
-        android:foreground="?selectableItemBackground"
-        android:tint="#4CAF50"/>
+        android:text="😊"
+        android:textSize="27sp" />
 
-    <ImageView
-        android:id="@+id/btnHairFace"
+    <TextView
+        android:id="@+id/btnSad"
         android:layout_width="@dimen/emoji_size"
         android:layout_height="@dimen/emoji_size"
-        android:src="@drawable/ic_hair_face"
-        android:foreground="?selectableItemBackground"
-        android:tint="#00f"/>
+        android:text="😢"
+        android:textSize="27sp" />
 
-    <ImageView
-        android:id="@+id/btnGroup"
+    <TextView
+        android:id="@+id/btnAngry"
         android:layout_width="@dimen/emoji_size"
         android:layout_height="@dimen/emoji_size"
-        android:src="@drawable/ic_group_face"
-        android:foreground="?selectableItemBackground"
-        android:tint="#FF9800"/>
-
+        android:text="😠"
+        android:textSize="27sp" />
 </LinearLayout>
