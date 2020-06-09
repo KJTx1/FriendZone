@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:paddingTop="5dp">
 
     <ImageView
         android:id="@+id/ivPostImage"
@@ -48,7 +47,8 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/ivPlay"
@@ -60,15 +60,20 @@
 
     <TextView
         android:id="@+id/tvDesc"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text=""
         android:layout_marginLeft="5dp"
-        android:textSize="12sp"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ivPostImage"
         app:layout_constraintStart_toEndOf="@+id/tvUsername"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="2"/>
+        app:layout_constraintVertical_bias="0.3"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:maxLines="1"
+        android:singleLine="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

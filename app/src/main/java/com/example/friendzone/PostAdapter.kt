@@ -67,7 +67,7 @@ class PostAdapter(private val initialListOfPosts: List<UploadManager>, private v
             tvUsername.text = post.userName
             Picasso.get().load(post.imageUrl).into(ivPostImage)
             tvTimestamp.text = convertLongToTime(post.timeStamp!!)
-            tvDesc.text = "is feeling ${post.postDesc}"
+            tvDesc.text = "feeling ${post.postDesc}"
             val hasAudio = post.audioUrl != ""
             val reactions = arrayOf(HAPPY, LAUGH, SAD, ANGRY, SURPRISE).toMutableList()
             var adapter = ArrayAdapter(parent, android.R.layout.simple_list_item_1, reactions)

@@ -65,7 +65,7 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .setView(taskEditText)
             .setPositiveButton("Add"
             ) { _, _ ->
-                val user = taskEditText.text.toString()
+                val user = taskEditText.text.toString().toLowerCase()
 
                 app.apiManager.addUser(user, group, {
 
