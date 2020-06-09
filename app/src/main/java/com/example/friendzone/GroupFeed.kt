@@ -39,6 +39,8 @@ class GroupFeed : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Log.i("size", posts.size.toString())
             if (posts.size == 0) {
                 tvNoPost.visibility = View.VISIBLE
+            } else {
+                tvNoPost.visibility = View.GONE
             }
             postAdapter = PostAdapter(posts, app)
             rvPostFeed.adapter = postAdapter
