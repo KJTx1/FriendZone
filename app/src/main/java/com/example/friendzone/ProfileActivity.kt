@@ -12,24 +12,18 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        val btnEdit = findViewById<Button>(R.id.btnEdit)
+
+        btnEdit.setOnClickListener {
+            changeClicked(btnEdit)
+        }
     }
 
-    fun changeClicked(view: View) {
+    private fun changeClicked(btnEdit: Button) {
+        val etName = findViewById<TextView>(R.id.etName)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
 
-//        val tvUsername = findViewById<TextView>(R.id.tvUsername)
-//        val btnChange = findViewById<Button>(R.id.btnChange)
-//        val etUsername = findViewById<EditText>(R.id.etUsername)
-//
-//        if (btnChange.text == "Change User") {
-//            tvUsername.setVisibility(View.INVISIBLE)
-//            etUsername.setVisibility(View.VISIBLE)
-//            val inputedName = etUsername.text.toString()
-//            btnChange.text = "Apply"
-//        } else {
-//            btnChange.text = "Change User"
-//            tvUsername.setText(etUsername.text.toString())
-//            tvUsername.setVisibility(View.VISIBLE)
-//            etUsername.setVisibility(View.INVISIBLE)
-//        }
     }
 }
